@@ -1,40 +1,58 @@
+# Primero van las importaciones de tus otros archivos
 from personas import Feligres
 from seguridad import validar_dni
-from excepciones import DatosInvalidosError
+from repositorio import Repositorio
+from sacramentos import Bautizo
+from reportes import ReporteParroquia
 
-def menu():
-    print("\n--- SISTEMA PARROQUIAL ---")
-    print("1. Registrar Feligrés")
-    print("2. Salir")
+# Segundo: Creamos el almacén en blanco
+repo = Repositorio()
+
+# Tercero: Iniciamos el interruptor del programa
+continuar = True
+
+# Cuarto: El menú que procesa las opciones
+while continuar == True:
+    print("")
+    print("--- MENU DE LA PARROQUIA ---")
+    print("1. Registrar Feligres y Bautizo")
+    print("2. Mostrar todos los registros")
+    print("3. Ver Reporte Estadistico")
+    print("4. Salir del programa")
+    print("----------------------------")
     
-    opcion = input("Seleccione una opción: ")
+    opcion = input("Elija una opcion (1, 2, 3 o 4): ")
     
     if opcion == "1":
-        nombre = input("Ingrese nombre: ")
-        telefono = input("Ingrese teléfono: ")
-        direccion = input("Ingrese dirección: ")
-        dni = input("Ingrese DNI: ")
+        print("\n--- DATOS DEL FELIGRES ---")
+        nom = input("Ingrese el nombre: ")
+        doc = input("Ingrese el DNI: ")
+        tel = input("Ingrese el telefono: ")
+        dir = input("Ingrese la direccion: ")
         
-        try:
-            # Aquí tu código de seguridad intercepta y valida el DNI ingresado
-            if validar_dni(dni):
-                nuevo_feligres = Feligres(nombre, dni, telefono, direccion)
-                print("\n¡Feligrés registrado con éxito!")
-                nuevo_feligres.mostrar_datos()
-                
-        except DatosInvalidosError as e:
-            # Si el DNI está mal, tu excepción atrapa el error y avisa en pantalla
-            print(f"\n[ERROR]: {e}")
-            print("El feligrés no pudo ser registrado.")
+        if validar_dni(doc) == True:
+            nuevo_feligres = Feligres(nom, doc, tel, dir)
+            
+            print("\n--- DATOS DEL BAUTIZO ---")
+            fec = input("Ingrese la fecha (DD/MM/AAAA): ")
+            cos = input("Ingrese el costo: ")
+            
+            nuevo_bautizo = Bautizo(nuevo_feligres, fec, cos)
+            repo.agregar_inscripcion(nuevo_bautizo)
+            print("\n¡Todo se guardo correctamente!")
+        else:
+            print("\n[ERROR] El DNI debe tener 8 numeros.")
             
     elif opcion == "2":
-        print("Saliendo del sistema...")
-        return False
+        repo.mostrar_inscripciones()
+        
+    elif opcion == "3":
+        rep = ReporteParroquia(repo)
+        rep.mostrar_resumen()
+        
+    elif opcion == "4":
+        print("\nCerrando el sistema. ¡Adios!")
+        continuar = False
+        
     else:
-        print("Opción no válida.")
-    return True
-
-# Bucle para mantener el programa corriendo
-corriendo = True
-while corriendo:
-    corriendo = menu()
+        print("\nEsa opcion no existe. Marque 1, 2, 3 o 4.")
