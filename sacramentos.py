@@ -1,31 +1,33 @@
 class Sacramento:
 
-    def __init__(self, nombre_sacramento, costo):
-        self.nombre_sacramento = nombre_sacramento
+    def __init__(self, beneficiario, fecha, costo):
+        self.beneficiario = beneficiario
+        self.fecha = fecha
         self.costo = costo
 
-    def mostrar_detalle(self):
-        print("Sacramento:", self.nombre_sacramento)
-        print("Costo de tramitación: S/.", self.costo)
+    def mostrar_datos(self):
+        print("Actividad:", self.tipo())
+        print("Beneficiario:", self.beneficiario.nombre)
+        print("Fecha:", self.fecha)
+        print("Costo: S/.", self.costo)
+
+    def tipo(self):
+        return "Sacramento"
 
 
 class Bautizo(Sacramento):
 
-    def __init__(self, costo, fecha_bautizo):
-        super().__init__("Bautizo", costo)
-        self.fecha_bautizo = fecha_bautizo
-
-    def mostrar_detalle(self):
-        super().mostrar_detalle()
-        print("Fecha programada para el bautizo:", self.fecha_bautizo)
+    def tipo(self):
+        return "Bautizo"
 
 
 class Matrimonio(Sacramento):
 
-    def __init__(self, costo, iglesia_boda):
-        super().__init__("Matrimonio", costo)
-        self.iglesia_boda = iglesia_boda
+    def tipo(self):
+        return "Matrimonio"
 
-    def mostrar_detalle(self):
-        super().mostrar_detalle()
-        print("Lugar de la boda:", self.iglesia_boda)
+
+class Retiro(Sacramento):
+
+    def tipo(self):
+        return "Retiro"
